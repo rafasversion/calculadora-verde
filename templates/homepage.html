@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+</head>
+
+<body>
+  <h1>PAINEL DE CONTROLE</h1>
+  <div class="painel">
+    <form method="POST" action="/calcular">
+      <p>
+        <label>Energia total da instalação:</label><br>
+        <input type="text" name="energia_total" required>
+      </p>
+      <p>
+        <label>Energia dos equipamentos de TI:</label><br>
+        <input type="text" name="energia_equipamentos" required>
+      </p>
+      <p>
+        <label>Emissões totais de CO2 do Data Center:</label><br>
+        <input type="text" name="emissao_total_co2" required>
+      </p>
+      <p>
+        <label>Volume total de água utilizada:</label><br>
+        <input type="text" name="volume_agua_utilizada" required>
+      </p>
+      <p><button type="submit">CALCULAR</button></p>
+    </form>
+
+    <div class="medidores">
+      <div class="medidor-container">
+        <h2>PUE</h2>
+        <img src="{{ url_for('static', filename='img/medidor_pue.svg') }}" class="medidor-img" alt="medidor">
+        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_pue|default(0) }}deg);">
+      </div>
+      <div class="medidor-container">
+        <h2>CUE</h2>
+        <img src="{{ url_for('static', filename='img/medidor_cue.svg') }}" class="medidor-img" alt="medidor">
+        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_cue|default(0) }}deg);">
+      </div>
+    </div>
+    <div class="medidores">
+      <div class="medidor-container">
+        <h2>DCiE (%)</h2>
+        <img src="{{ url_for('static', filename='img/medidor_dcie.svg') }}" class="medidor-img" alt="medidor">
+        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_dcie|default(0) }}deg);">
+      </div>
+      <div class="medidor-container">
+        <h2>WUE</h2>
+        <img src="{{ url_for('static', filename='img/medidor_cue.svg') }}" class="medidor-img" alt="medidor">
+        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_wue|default(0) }}deg);">
+      </div>
+    </div>
+  </div>
+
+
+  {% if resultado_pue %}
+  <div class="status">
+    <p>{{ resultado_pue|safe }}</p>
+    <p>{{ resultado_cue|safe }}</p>
+    <p>{{ resultado_dcie|safe }}</p>
+    <p>{{ resultado_wue|safe }}</p>
+  </div>
+  {% endif %}
+
+</body>
+
+</html>
