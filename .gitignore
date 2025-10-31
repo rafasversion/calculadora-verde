@@ -1,0 +1,31 @@
+# Ambiente virtual
+venv/
+.env/
+*.env
+
+# Cache e temporários do Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+
+# Logs e relatórios
+*.log
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Configs locais (por exemplo, do VSCode, PyCharm etc.)
+.vscode/
+.idea/
+
+# Arquivos de build ou temporários
+instance/
+*.sqlite3
+*.db
+
+# Arquivos temporários do Flask
+flask_session/
