@@ -10,6 +10,10 @@ app = Flask(__name__)
 def homepage():
     return render_template("homepage.html")
 
+@app.route("/metricas")
+def metricas():
+    return render_template("metricas.html")
+
 @app.route("/calcular", methods=["POST"])
 def calcular():
     energia_total = request.form.get("energia_total")

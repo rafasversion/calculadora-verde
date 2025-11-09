@@ -122,3 +122,35 @@ button {
   border-radius: 5px;
   width: 243px;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: rgb(0, 39, 20);
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.header-right nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+}
+
+.header-right nav a:hover {
+  text-decoration: underline;
+}
+
