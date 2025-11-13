@@ -7,51 +7,58 @@ body {
 }
 
 h1 {
-  color: rgb(0, 39, 20);
-  text-align: center;
+  color: rgb(0, 188, 19);
+}
+
+.header {
+  margin-top: 50px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: rgb(0, 39, 20);
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.header-right nav a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+
+.header-right nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #00e676;
+  transition: width 0.3s ease;
+}
+
+.header-right nav a:hover::after {
+  width: 100%;
 }
 
 .painel {
-  display: flex;
-  flex-direction: row;
   justify-content: center;
   margin-top: 80px;
   gap: 100px;
-}
-
-form {
-  width: 400px;
-  border-radius: 5px;
-  padding: 20px;
-  background: #ffff;
-  height: 600px;
-  align-items: center;
-}
-
-input,
-label {
-  display: block;
-}
-
-label {
-  margin-bottom: 10px;
-}
-
-input {
-  width: 380px;
-  height: 35px;
-  border-radius: 10px;
-  border: #cecece 2px solid;
-}
-
-button {
-  width: 100px;
-  height: 40px;
-  background: rgb(0, 39, 20);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-weight: bolder;
 }
 
 .painel__controle {
@@ -72,7 +79,7 @@ button {
 
 .medidores {
   display: flex;
-  flex-direction: column;
+  gap: 50px;
 }
 
 .medidor-img {
@@ -84,14 +91,22 @@ button {
 
 .medidor-container {
   position: relative;
-  width: 300px;
+  width: 200px;
   max-width: 90%;
   display: inline-block;
   background: rgb(0, 39, 20);
   padding: 30px;
-  border-radius: 5px;
+  padding-top: 10px;
+  border-radius: 10px;
   margin-bottom: 50px;
   color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.medidor-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .ponteiro {
@@ -107,18 +122,100 @@ button {
   pointer-events: none;
 }
 
-input[type="text"] {
-  padding: 6px;
-  width: 220px;
-}
-button {
-  padding: 8px 14px;
-  cursor: pointer;
-}
-
 .status {
   background: white;
   padding: 20px;
   border-radius: 5px;
   width: 243px;
+}
+
+.table-datacenters {
+  background: #fff;
+  border-radius: 10px;
+  margin: 0 auto;
+  width: 1200px;
+}
+
+.table-datacenters th {
+  text-align: left;
+  color: rgb(0, 39, 20);
+}
+
+.table-datacenters th,
+td {
+  padding: 10px;
+}
+
+.table-datacenters tr td,
+th {
+  border-bottom: 1px solid #d5d5d5;
+}
+
+.table-datacenters td:last-child {
+  text-align: center;
+}
+
+.table-datacenters button {
+  width: 100px;
+  height: 30px;
+  background: rgb(0, 39, 20);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  align-items: center;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.table-datacenters button:hover {
+  color: #fff;
+  background: rgb(0, 188, 19);
+}
+
+.datacenter-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.datacenter-card {
+  display: flex;
+  gap: 100px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 1200px;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.datacenter-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.datacenter-card p {
+  margin: 10px 0;
+  font-size: 0.95rem;
+}
+
+.datacenter-card p strong {
+  color: rgb(0, 39, 20);
+}
+
+.datacenter-card__indices {
+  background-color: #e9fbe5;
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+.datacenter-card__indices p {
+  font-weight: bold;
+  color: rgb(0, 39, 20);
+}
+
+.datacenter-card__status {
+  color: rgb(0, 188, 19);
+  font-weight: bold;
 }

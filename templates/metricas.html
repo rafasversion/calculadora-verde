@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+</head>
+
+
+<header class="header">
+  <div class="header-left">
+    <h1>Calculadora verde</h1>
+  </div>
+  <div class="header-right">
+    <nav>
+      <a href="/">Home</a>
+      <a href="/metricas">Métricas</a>
+    </nav>
+  </div>
+</header>
+<div class="container mt-5">
+
+  <body>
+
+    <h1 style="text-align: left;">Power Usage Effectiveness (PUE)</h1>
+    <p style="text-align: justify;">É a métrica utilizada para média
+      eficiência enérgica de um Data Center. É a razão entre a energia total que
+      entra no Data Center e a energia consumida apenas pelos equipamentos
+      de TI (kWh).
+    </p>
+
+    <hr>
+
+    <h1 style="text-align: left;">Carbon Usage Effectiveness (CUE)</h1>
+    <p style="text-align: justify;">É a métrica que mede as emissões
+      de dióxido de carbono relacionada à energia consumida. É a razão entre
+      as emissões de CO2 do Data Center e a energia consumida pelos
+      equipamentos de TI (kWh).
+    </p>
+    <p style="text-align: justify;">
+      Para calcular as emissões totais de CO2 do Data Center é necessário multiplicar o
+      consumo de energia elétrica pelo fator de emissão de carbono da fonte energética
+      local.
+    </p>
+    <p style="text-align: justify;">
+      <b>Energia Consumida (kWh):</b> medida de quanto o data center usou de eletricidade.
+    </p>
+    <p style="text-align: justify;">
+      <b>Fator de Emissão:</b> depende do tipo de geração:
+    <ul>
+      <li>
+        Hidrelétrica: ~0,05 kg CO₂/kWh
+      </li>
+      <li>
+        Gás natural: ~0,45 kg CO₂/kWh
+      </li>
+      <li>
+        Carvão: ~0,9 kg CO₂/kWh
+      </li>
+    </ul>
+    </p>
+
+    <hr>
+
+    <h1 style="text-align: left;">Water Usage Effectiveness (WUE)</h1>
+    <p style="text-align: justify;">É a métrica que quantifica o uso de
+      água do Data Center. É a razão entre o volume anual de água utilizado pelo
+      data center e a energia consumida pelos equipamentos de TI (kWh).
+    </p>
+
+    <hr>
+
+    <h1 style="text-align: left;">Data Center Infrastructure Efficiency (DCiE)</h1>
+    <p style="text-align: justify;">É a porcentagem da energia
+      total que está sendo usada para a carga de TI. É o inverso do PUE.
+    </p>
+
+  </body>
+</div>
+
+</html>

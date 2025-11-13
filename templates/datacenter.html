@@ -7,7 +7,6 @@
   <title>Document</title>
   <link rel="stylesheet" href="static/css/homepage.css">
 </head>
-
 <header class="header">
   <div class="header-left">
     <h1>Calculadora Verde</h1>
@@ -22,6 +21,8 @@
 
 <body>
   <div class="painel">
+    <h1>DataCenter São Paulo 01</h1>
+
     <div class="medidores">
       <div class="medidor-container">
         <h2>PUE</h2>
@@ -47,61 +48,35 @@
     </div>
   </div>
 
+  <main class="datacenter-container">
+    <div class="datacenter-card">
+      <div class="datacenter-card__infos">
+        <p><strong>Localização:</strong> Av. das Nações Unidas, 12345 - São Paulo, SP - Brasil</p>
+        <p><strong>Capacidade:</strong> 4000 kW</p>
+        <p><strong>Energia Total:</strong> 10500000 kWh</p>
+        <p><strong>Energia TI:</strong> 7240000 kWh</p>
+        <p><strong>Emissão Total CO₂:</strong> 735000 kg</p>
+      </div>
+      <div class="datacenter-card__infos">
+        <p><strong>Fator de Emissão:</strong> 0.07 kgCO₂/kWh</p>
+        <p><strong>Volume de Água:</strong> 8688000 L</p>
+        <p><strong>Temperatura Média:</strong> 23.5 °C</p>
+        <p><strong>Umidade Média:</strong> 50%</p>
+      </div>
 
-  <table class="table-datacenters">
-    <thead>
-      <tr>
-        <th scope="col">Data Center</th>
-        <th scope="col">Localidade</th>
-        <th scope="col">Capacidade</th>
-        <th scope="col">PUE</th>
-        <th scope="col">CUE</th>
-        <th scope="col">DCiE</th>
-        <th scope="col">WUE</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>DC-SP01</td>
-        <td>São Paulo, SP - Brasil</td>
-        <td>4000 kW</td>
-        <td>1.45</td>
-        <td>0.08</td>
-        <td>68.97</td>
-        <td>1.25</td>
-        <td>
-          <a href="/datacenter"><button>⟶</button></a>
-        </td>
-      </tr>
-      <tr>
-        <td>DC-RJ01</td>
-        <td>Rio de Janeiro, RJ - Brasil</td>
-        <td>2500 kW</td>
-        <td>1.52</td>
-        <td>0.10</td>
-        <td>65.78</td>
-        <td>1.30</td>
-        <td>
-          <button>⟶</button>
-        </td>
-      </tr>
-      <tr>
-        <td>DC-MG01</td>
-        <td>Itabirito, MG - Brasil</td>
-        <td>1800 kW</td>
-        <td>1.35</td>
-        <td>0.07</td>
-        <td>74.07</td>
-        <td>1.10</td>
-        <td>
-          <button>⟶</button>
-        </td>
-      </tr>
+      <div class="datacenter-card__dados">
+        <div class="datacenter-card__indices">
+          <p><strong>PUE:</strong> 1.45</p>
+          <p><strong>CUE:</strong> 0.08</p>
+          <p><strong>WUE:</strong> 1.25</p>
+          <p><strong>DCiE:</strong> 68.97</p>
+        </div>
+        <p class="datacenter-card__status"><strong>Status:</strong> Operacional</p>
+      </div>
 
-    </tbody>
-  </table>
+    </div>
 
+  </main>
 
   {% if resultado_pue %}
   <div class="status">

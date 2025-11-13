@@ -1,0 +1,274 @@
+{
+  "datacenters": [
+    {
+      "id": "DC-SP01",
+      "nome": "DataCenter São Paulo 01",
+      "localizacao": {
+        "endereco": "Av. das Nações Unidas, 12345 - São Paulo, SP - Brasil",
+        "latitude": "-23.5629",
+        "longitude": "-46.6544",
+        "zona": "Sul"
+      },
+      "operacao": {
+        "proprietario": "CloudTech Serviços Digitais S.A.",
+        "tipo": "Colocation",
+        "data_inicio": "2018-03-12",
+        "status": "Operacional",
+        "sla_disponibilidade": "99.99%"
+      },
+      "infraestrutura": {
+        "area_total_m2": "6500",
+        "area_util_m2": "4200",
+        "num_racks": "380",
+        "piso_elevado": true,
+        "redundancia_energia": "N+1",
+        "redundancia_climatizacao": "N+1"
+      },
+      "energia": {
+        "alimentacao_principal": "AES Eletropaulo",
+        "capacidade_total_kW": "4000",
+        "consumo_medio_kW": "3100",
+        "renovavel_kWh": "4200000",
+        "fator_emissao_kgCO2_kWh": "0.07",
+        "fonte_fator": "ONS 2025",
+        "ups": {
+          "tipo": "Online Dupla Conversão",
+          "fabricante": "APC",
+          "modelo": "Symmetra PX",
+          "autonomia_min": "15",
+          "quantidade": "6"
+        },
+        "geradores": {
+          "fabricante": "Cummins",
+          "quantidade": "3",
+          "autonomia_horas": "12"
+        },
+        "PUE": "1.45",
+        "DCiE": "68.97",
+        "WUE": "1.25",
+        "CUE": "0.08"
+      },
+      "climatizacao": {
+        "tipo": "CRAC + Free Cooling",
+        "capacidade_total_kW": "4200",
+        "temperatura_media_C": "23.5",
+        "umidade_relativa": "50%"
+      },
+      "rede": {
+        "carriers": ["Vivo", "Embratel", "Algar Telecom"],
+        "uplink_total_Gbps": "600",
+        "topologia": "Spine-Leaf",
+        "bgp_asn": "265432",
+        "ixps": ["IX.br-SP"],
+        "enderecos_IP": {
+          "publicos": "2804:abcd::/48",
+          "privados": "10.10.0.0/16"
+        }
+      },
+      "seguranca": {
+        "fisica": {
+          "biometria": true,
+          "cftv": true,
+          "retencao_imagens_dias": "90",
+          "supressao_incendio": "FM200"
+        },
+        "logica": {
+          "firewall": "FortiGate 600E",
+          "ids_ips": "Snort",
+          "siem": "Splunk",
+          "certificacoes": ["ISO 27001", "SOC 2 Type II"]
+        }
+      },
+      "monitoramento": {
+        "sistema": "Zabbix",
+        "metricas": ["CPU", "Energia", "Temperatura", "Rede"],
+        "alertas_email": true
+      },
+      "backup_e_DR": {
+        "rpo_min": "15",
+        "rto_min": "60",
+        "local_secundario": "DC-RJ01",
+        "teste_DR_ultimo": "2025-08-10"
+      },
+      "metricas_ambientais": {
+        "periodo": {
+          "inicio": "2025-01-01",
+          "fim": "2025-12-31"
+        },
+        "energia_total_kWh": "10500000",
+        "energia_ti_kWh": "7240000",
+        "energia_renovavel_kWh": "4200000",
+        "agua_consumida_L": "8688000",
+        "reuso_percentual": "30",
+        "emissao_CO2_kg": "735000",
+        "fator_emissao_kgCO2_kWh": "0.07",
+        "fonte_dado": ["medidores", "UPS logs", "BMS"],
+        "tipo_calculo_emissao": "estimado"
+      },
+      "indicadores": {
+        "pue": "1.45",
+        "cue": "0.08",
+        "wue": "1.25",
+        "dcie": "68.97",
+        "status": "Operacional"
+      }
+    },
+    {
+      "id": "DC-RJ01",
+      "nome": "DataCenter Rio de Janeiro 01",
+      "localizacao": {
+        "endereco": "Av. das Américas, 9000 - Barra da Tijuca, Rio de Janeiro, RJ",
+        "latitude": "-22.9994",
+        "longitude": "-43.3659"
+      },
+      "operacao": {
+        "proprietario": "CloudTech Serviços Digitais S.A.",
+        "tipo": "Backup / DR",
+        "data_inicio": "2019-09-20",
+        "status": "Operacional",
+        "sla_disponibilidade": "99.95%"
+      },
+      "energia": {
+        "capacidade_total_kW": "2500",
+        "renovavel_kWh": "1600000",
+        "fator_emissao_kgCO2_kWh": "0.09",
+        "fonte_fator": "ONS 2025",
+        "geradores": {
+          "quantidade": "2",
+          "autonomia_horas": "10"
+        },
+        "PUE": "1.52",
+        "DCiE": "65.78",
+        "WUE": "1.3",
+        "CUE": "0.1"
+      },
+      "climatizacao": {
+        "tipo": "Water-Cooled",
+        "temperatura_media_C": "24"
+      },
+      "rede": {
+        "carriers": ["Claro", "Vivo"],
+        "uplink_total_Gbps": "400",
+        "bgp_asn": "265433",
+        "ixps": ["IX.br-RJ"]
+      },
+      "seguranca": {
+        "fisica": {
+          "biometria": true,
+          "cftv": true,
+          "supressao_incendio": "Novec 1230"
+        }
+      },
+      "backup_e_DR": {
+        "replica_de": "DC-SP01",
+        "rpo_min": "30",
+        "rto_min": "120"
+      },
+      "metricas_ambientais": {
+        "periodo": {
+          "inicio": "2025-01-01",
+          "fim": "2025-12-31"
+        },
+        "energia_total_kWh": "6400000",
+        "energia_ti_kWh": "4210000",
+        "energia_renovavel_kWh": "1600000",
+        "agua_consumida_L": "6315000",
+        "reuso_percentual": "20",
+        "emissao_CO2_kg": "1431000",
+        "fator_emissao_kgCO2_kWh": "0.09",
+        "fonte_dado": ["medidores", "sistema SCADA"],
+        "tipo_calculo_emissao": "estimado"
+      },
+      "indicadores": {
+        "pue": "1.52",
+        "cue": "0.1",
+        "wue": "1.3",
+        "dcie": "65.78",
+        "status": "Operacional"
+      }
+    },
+    {
+      "id": "DC-MG01",
+      "nome": "DataCenter Minas Gerais 01",
+      "localizacao": {
+        "endereco": "Rod. BR-356, km 45 - Itabirito, MG",
+        "latitude": "-20.2501",
+        "longitude": "-43.8005"
+      },
+      "operacao": {
+        "proprietario": "NetHost Brasil Ltda",
+        "tipo": "Enterprise Privado",
+        "data_inicio": "2021-04-02",
+        "status": "Em Expansão",
+        "sla_disponibilidade": "99.9%"
+      },
+      "infraestrutura": {
+        "area_total_m2": "3200",
+        "num_racks": "190",
+        "redundancia_energia": "2N"
+      },
+      "energia": {
+        "capacidade_total_kW": "1800",
+        "renovavel_kWh": "900000",
+        "fator_emissao_kgCO2_kWh": "0.06",
+        "fonte_fator": "ONS 2025",
+        "geradores": {
+          "quantidade": "2",
+          "autonomia_horas": "24"
+        },
+        "PUE": "1.35",
+        "DCiE": "74.07",
+        "WUE": "1.1",
+        "CUE": "0.07"
+      },
+      "climatizacao": {
+        "tipo": "Free Cooling + Chillers",
+        "temperatura_media_C": "22",
+        "umidade_relativa": "50%"
+      },
+      "rede": {
+        "carriers": ["Vivo", "TIM", "Oi"],
+        "uplink_total_Gbps": "200",
+        "topologia": "Redundante Dual-Core"
+      },
+      "seguranca": {
+        "fisica": {
+          "biometria": true,
+          "cftv": true,
+          "guardas_24h": true
+        },
+        "logica": {
+          "firewall": "Palo Alto 3220",
+          "siem": "Graylog"
+        }
+      },
+      "monitoramento": {
+        "sistema": "PRTG",
+        "alertas_email": false,
+        "alertas_sms": true
+      },
+      "metricas_ambientais": {
+        "periodo": {
+          "inicio": "2025-01-01",
+          "fim": "2025-12-31"
+        },
+        "energia_total_kWh": "4700000",
+        "energia_ti_kWh": "3400000",
+        "energia_renovavel_kWh": "900000",
+        "agua_consumida_L": "3060000",
+        "reuso_percentual": "40",
+        "emissao_CO2_kg": "748000",
+        "fator_emissao_kgCO2_kWh": "0.06",
+        "fonte_dado": ["UPS logs", "sistema EMS"],
+        "tipo_calculo_emissao": "estimado"
+      },
+      "indicadores": {
+        "pue": "1.35",
+        "cue": "0.07",
+        "wue": "1.1",
+        "dcie": "74.07",
+        "status": "Em Expansão"
+      }
+    }
+  ]
+}

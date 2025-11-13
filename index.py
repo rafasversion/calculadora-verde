@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, render_template
 from calculador import calcular_pue
 from calculador import calcular_cue
@@ -9,6 +10,29 @@ app = Flask(__name__)
 @app.route("/")
 def homepage():
     return render_template("homepage.html")
+
+@app.route("/metricas")
+def metricas():
+    return render_template("metricas.html")
+
+@app.route("/datacenter")
+def datacenter():
+    with open("datacenters.json", "r", encoding="utf-8") as f:
+        dados = json.load(f)
+
+    for dc in dados["datacenters"]:
+        m = dc["metricas_ambientais"]
+        energia_total = m["energia_total_kWh"]
+        energia_ti = m["energia_ti_kWh"]
+        emissao = m["emissao_CO2_kg"]
+        agua = m["agua_consumida_L"]
+
+        dc["energia"]["PUE"] = calcular_pue(energia_total, energia_ti)["pue"]
+        dc["energia"]["DCiE"] = calcular_dcie(energia_total, energia_ti)["dcie"]
+        dc["energia"]["CUE"] = calcular_cue(emissao, energia_ti)["cue"]
+        dc["energia"]["WUE"] = calcular_wue(agua, energia_ti)["wue"]
+
+    return render_template("datacenter.html", datacenters=dados["datacenters"])
 
 @app.route("/calcular", methods=["POST"])
 def calcular():
