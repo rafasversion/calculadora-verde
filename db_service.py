@@ -23,9 +23,9 @@ def listar_datacenters():
 
 def buscar_datacenter(datacenter_id):
     datacenters = listar_datacenters()
-    for u in datacenters:
-        if u["id"] == datacenter_id:
-            return u
+    for d in datacenters:
+        if d["id"] == datacenter_id:
+            return d
     return None
 
 
@@ -35,7 +35,7 @@ def adicionar_datacenter(nome):
     datacenters = dados["datacenters"]
     novo_id = 1
     if datacenters:
-        novo_id = max(u["id"] for u in datacenters) + 1
+        novo_id = max(d["id"] for d in datacenters) + 1
 
     novo_datacenter = {"id": novo_id, "nome": nome}
     datacenters.append(novo_datacenter)
@@ -48,6 +48,6 @@ def remover_datacenter(datacenter_id):
     dados = _carregar()
     datacenters = dados["datacenters"]
 
-    dados["datacenters"] = [u for u in datacenters if u["id"] != datacenter_id]
+    dados["datacenters"] = [d for d in datacenters if d["id"] != datacenter_id]
 
     _salvar(dados)
