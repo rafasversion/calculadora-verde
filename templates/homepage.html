@@ -62,43 +62,20 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>DC-SP01</td>
-        <td>São Paulo, SP - Brasil</td>
-        <td>4000 kW</td>
-        <td>1.45</td>
-        <td>0.08</td>
-        <td>68.97</td>
-        <td>1.25</td>
-        <td>
-          <a href="/datacenter"><button>⟶</button></a>
-        </td>
-      </tr>
-      <tr>
-        <td>DC-RJ01</td>
-        <td>Rio de Janeiro, RJ - Brasil</td>
-        <td>2500 kW</td>
-        <td>1.52</td>
-        <td>0.10</td>
-        <td>65.78</td>
-        <td>1.30</td>
-        <td>
-          <button>⟶</button>
-        </td>
-      </tr>
-      <tr>
-        <td>DC-MG01</td>
-        <td>Itabirito, MG - Brasil</td>
-        <td>1800 kW</td>
-        <td>1.35</td>
-        <td>0.07</td>
-        <td>74.07</td>
-        <td>1.10</td>
-        <td>
-          <button>⟶</button>
-        </td>
-      </tr>
-
+        {% for d in datacenters %}
+            <tr>
+                <td>{{ d.id }}</td>
+                <td>{{ d.nome }}</td>
+                <td>{{ d.energia.capacidade_total_kW }}</td>
+                <td>{{ d.energia.PUE }}</td>
+                <td>{{ d.energia.CUE }}</td>
+                <td>{{ d.energia.DCiE }}</td>
+                <td>{{ d.energia.WUE }}</td>
+                 <td>
+                    <a href="/datacenter"><button>⟶</button></a>
+                </td>
+            </tr>
+            {% endfor %}
     </tbody>
   </table>
 

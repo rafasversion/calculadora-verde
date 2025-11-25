@@ -4,12 +4,14 @@ from calculador import calcular_pue
 from calculador import calcular_cue
 from calculador import calcular_dcie
 from calculador import calcular_wue
+import db_service as db
 
 app = Flask(__name__)
 
 @app.route("/")
 def homepage():
-    return render_template("homepage.html")
+    datacenters = db.listar_datacenters()
+    return render_template("homepage.html", datacenters=datacenters)
 
 @app.route("/metricas")
 def metricas():
@@ -144,4 +146,5 @@ def calcular():
 
 
 if __name__ == "__main__":
+    print(datacenter)
     app.run(debug=True)
