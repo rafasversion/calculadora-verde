@@ -219,3 +219,60 @@ th {
   color: rgb(0, 188, 19);
   font-weight: bold;
 }
+
+.container-btn_adicionar {
+  display: flex;
+  justify-content: flex-end;
+}
+.btn-adicionarDatacenter {
+  width: 180px;
+  height: 30px;
+  align-content: end;
+  font-weight: bold;
+  margin-bottom: 15px;
+  background: none;
+  border: 2px solid rgb(0, 39, 20);
+  border-radius: 5px;
+  color: rgb(0, 39, 20);
+  cursor: pointer;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  width: 350px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #0004;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+form input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}

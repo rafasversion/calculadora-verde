@@ -8,19 +8,21 @@
   <link rel="stylesheet" href="static/css/homepage.css">
 </head>
 
-<header class="header">
-  <div class="header-left">
-    <h1>Calculadora Verde</h1>
-  </div>
-  <div class="header-right">
-    <nav>
-      <a href="/">Home</a>
-      <a href="/metricas">Métricas</a>
-    </nav>
-  </div>
-</header>
+
 
 <body>
+  <header class="header">
+    <div class="header-left">
+      <h1>Calculadora Verde</h1>
+    </div>
+    <div class="header-right">
+      <nav>
+        <a href="/">Home</a>
+        <a href="/metricas">Métricas</a>
+      </nav>
+    </div>
+  </header>
+
   <div class="painel">
     <div class="medidores">
       <div class="medidor-container">
@@ -47,6 +49,31 @@
     </div>
   </div>
 
+  <div class="container-btn_adicionar">
+    <button class="btn-adicionarDatacenter" id="openModal">✚ Adicionar Data Center</button>
+  </div>
+
+  <div id="modal" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Adicionar Data Center</h2>
+
+      <form>
+        <label>Data Center</label>
+        <input type="text" required>
+
+        <label>Localidade</label>
+        <input type="text" required>
+
+        <label>Capacidade (kW)</label>
+        <input type="number" required>
+
+        <div class="form-buttons">
+          <button type="button" id="closeModal">Cancelar</button>
+          <button type="submit">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <table class="table-datacenters">
     <thead>
@@ -111,6 +138,31 @@
     <p>{{ resultado_wue|safe }}</p>
   </div>
   {% endif %}
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const modal = document.getElementById("modal");
+      const openBtn = document.getElementById("openModal");
+      const closeBtn = document.getElementById("closeModal");
+
+      openBtn.addEventListener("click", function () {
+        modal.style.display = "flex";
+      });
+
+      closeBtn.addEventListener("click", function () {
+        modal.style.display = "none";
+      });
+
+      window.addEventListener("click", function (e) {
+        if (e.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+
+    });
+
+  </script>
 
 </body>
 

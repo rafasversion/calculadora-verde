@@ -20,21 +20,10 @@ def datacenter():
     with open("datacenters.json", "r", encoding="utf-8") as f:
         dados = json.load(f)
 
-    for dc in dados["datacenters"]:
-        m = dc["metricas_ambientais"]
-        energia_total = m["energia_total_kWh"]
-        energia_ti = m["energia_ti_kWh"]
-        emissao = m["emissao_CO2_kg"]
-        agua = m["agua_consumida_L"]
-
-        dc["energia"]["PUE"] = calcular_pue(energia_total, energia_ti)["pue"]
-        dc["energia"]["DCiE"] = calcular_dcie(energia_total, energia_ti)["dcie"]
-        dc["energia"]["CUE"] = calcular_cue(emissao, energia_ti)["cue"]
-        dc["energia"]["WUE"] = calcular_wue(agua, energia_ti)["wue"]
-
     return render_template("datacenter.html", datacenters=dados["datacenters"])
 
 @app.route("/calcular", methods=["POST"])
+
 def calcular():
     energia_total = request.form.get("energia_total")
     energia_ti = request.form.get("energia_equipamentos")
@@ -69,25 +58,20 @@ def calcular():
 
     if "erro" in resultado_cue:
         mensagem_cue = f"{resultado_cue['erro']}"
-        angulo_cue = 0 
+        angulo_cue = 0
     else:
         mensagem_cue = (
-            f"<strong>CUE:</strong> {resultado_cue['cue']:.2f}<br>"
-            f"<strong>Status:</strong> {resultado_cue['status']}"
-        )
+          f"<strong>CUE:</strong> {resultado_cue['cue']:.2f}<br>"
+          f"<strong>Status:</strong> {resultado_cue['status']}"
+         )
 
-        cue = resultado_cue["cue"]
+        cue = resultado_cue["cue"]  
 
-        if cue < 1:
-            angulo_cue = -90
-        elif pue > 4:
-            angulo_cue = 90
-        else:
-      
-            angulo_cue = -90 + (cue - 1) * 60
+    
+    angulo_cue = -90 + (cue / 100) * 180
 
-  
-        angulo_cue = max(-90, min(90, angulo_cue))
+    angulo_cue = max(-90, min(90, angulo_cue))
+
 
    # dcie
     resultado_dcie = calcular_dcie(energia_total, energia_ti)
