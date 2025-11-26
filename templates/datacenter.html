@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="static/css/homepage.css">
+  <link rel="stylesheet" href="../static/css/homepage.css">
 </head>
 <header class="header">
   <div class="header-left">
@@ -21,7 +21,7 @@
 
 <body>
   <div class="painel">
-    <h1>DataCenter São Paulo 01</h1>
+    <h1>{{ datacenter.nome }}</h1>
 
     <div class="medidores">
       <div class="medidor-container">
@@ -50,27 +50,27 @@
   <main class="datacenter-container">
     <div class="datacenter-card">
       <div class="datacenter-card__infos">
-        <p><strong>Localização:</strong> Av. das Nações Unidas, 12345 - São Paulo, SP - Brasil</p>
-        <p><strong>Capacidade:</strong> 4000 kW</p>
-        <p><strong>Energia Total:</strong> 10500000 kWh</p>
-        <p><strong>Energia TI:</strong> 7240000 kWh</p>
-        <p><strong>Emissão Total CO₂:</strong> 735000 kg</p>
+        <p><strong>Localização:</strong> {{ datacenter.localizacao.endereco }} </p>
+        <p><strong>Capacidade:</strong> {{ datacenter.energia.capacidade_total_kW }} kW</p>
+        <p><strong>Energia Total:</strong> {{ datacenter.energia_total_kWh }} kWh</p>
+        <p><strong>Energia TI:</strong> {{ datacenter.energia_ti_kWh }} kWh</p>
+        <p><strong>Emissão Total CO₂:</strong> {{ datacenter.emissao_CO2_kg }} kg</p>
       </div>
       <div class="datacenter-card__infos">
-        <p><strong>Fator de Emissão:</strong> 0.07 kgCO₂/kWh</p>
-        <p><strong>Volume de Água:</strong> 8688000 L</p>
-        <p><strong>Temperatura Média:</strong> 23.5 °C</p>
-        <p><strong>Umidade Média:</strong> 50%</p>
+        <p><strong>Fator de Emissão:</strong> {{ datacenter.emissao_CO2fator_emissao_kgCO2_kWh_kg }} kgCO₂/kWh</p>
+        <p><strong>Volume de Água:</strong>  {{ datacenter.metricas_ambientais.agua_consumida_L }} L</p>
+        <p><strong>Temperatura Média:</strong> {{ datacenter.climatizacao.temperatura_media_C }} °C</p>
+        <p><strong>Umidade Média:</strong> {{ datacenter.climatizacao.umidade_relativa }}</p>
       </div>
 
       <div class="datacenter-card__dados">
         <div class="datacenter-card__indices">
-          <p><strong>PUE:</strong> 1.45</p>
-          <p><strong>CUE:</strong> 0.08</p>
-          <p><strong>WUE:</strong> 1.25</p>
-          <p><strong>DCiE:</strong> 68.97</p>
+          <p><strong>PUE:</strong> {{ datacenter.energia.PUE }}</p>
+          <p><strong>CUE:</strong> {{ datacenter.energia.CUE }}</p>
+          <p><strong>WUE:</strong> {{ datacenter.energia.WUE }}</p>
+          <p><strong>DCiE:</strong> {{ datacenter.energia.DCiE }}</p>
         </div>
-        <p class="datacenter-card__status"><strong>Status:</strong> Operacional</p>
+        <p class="datacenter-card__status"><strong>Status:</strong> {{ datacenter.indicadores.status }}</p>
       </div>
 
     </div>

@@ -4,23 +4,38 @@ from calculador import calcular_pue
 from calculador import calcular_cue
 from calculador import calcular_dcie
 from calculador import calcular_wue
+import db_service as db
 
 app = Flask(__name__)
 
 @app.route("/")
 def homepage():
-    return render_template("homepage.html")
+    datacenters = db.listar_datacenters()
+    return render_template("homepage.html", datacenters=datacenters)
 
 @app.route("/metricas")
 def metricas():
     return render_template("metricas.html")
 
-@app.route("/datacenter")
-def datacenter():
-    with open("datacenters.json", "r", encoding="utf-8") as f:
-        dados = json.load(f)
+@app.route("/datacenter/<int:id>")
+def datacenter(id):
+    dc = db.buscar_datacenter(id)
 
-    return render_template("datacenter.html", datacenters=dados["datacenters"])
+    if not dc:
+        return "Datacenter não encontrado", 404
+
+    m = dc["metricas_ambientais"]
+    energia_total = m["energia_total_kWh"]
+    energia_ti = m["energia_ti_kWh"]
+    emissao = m["emissao_CO2_kg"]
+    agua = m["agua_consumida_L"]
+
+    dc["energia"]["PUE"]  = calcular_pue(energia_total, energia_ti)["pue"]
+    dc["energia"]["DCiE"] = calcular_dcie(energia_total, energia_ti)["dcie"]
+    dc["energia"]["CUE"]  = calcular_cue(emissao, energia_ti)["cue"]
+    dc["energia"]["WUE"]  = calcular_wue(agua, energia_ti)["wue"]
+
+    return render_template("datacenter.html", datacenter=dc)
 
 @app.route("/calcular", methods=["POST"])
 
@@ -128,4 +143,5 @@ def calcular():
 
 
 if __name__ == "__main__":
+    print(datacenter)
     app.run(debug=True)

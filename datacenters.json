@@ -1,7 +1,8 @@
 {
   "datacenters": [
     {
-      "id": "DC-SP01",
+      "id": 1,
+      "codigo": "DC-SP01",
       "nome": "DataCenter São Paulo 01",
       "localizacao": {
         "endereco": "Av. das Nações Unidas, 12345 - São Paulo, SP - Brasil",
@@ -114,7 +115,8 @@
       }
     },
     {
-      "id": "DC-RJ01",
+      "id": 2,
+      "codigo": "DC-RJ01",
       "nome": "DataCenter Rio de Janeiro 01",
       "localizacao": {
         "endereco": "Av. das Américas, 9000 - Barra da Tijuca, Rio de Janeiro, RJ",
@@ -188,7 +190,8 @@
       }
     },
     {
-      "id": "DC-MG01",
+      "id": 3,
+      "codigo": "DC-MG01",
       "nome": "DataCenter Minas Gerais 01",
       "localizacao": {
         "endereco": "Rod. BR-356, km 45 - Itabirito, MG",
