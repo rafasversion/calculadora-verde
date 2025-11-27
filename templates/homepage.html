@@ -53,109 +53,112 @@
   </div>
 
   <!-- modais --> 
-  <div id="modal" class="modal-overlay">
-    <div class="modal-content">
-      <h2>Adicionar Data Center</h2>
+      <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+          <h2>Adicionar Data Center</h2>
 
-      <form id="formNovoDC" action="{{ url_for('api_adicionar_datacenter') }}" method="post">
+          <form id="formNovoDC" action="{{ url_for('api_adicionar_datacenter') }}" method="post">
 
-        <div class="form-container">
+            <div class="form-container">
 
-          <div>
-            <h3>Informações Gerais</h3>
+              <div>
+                <h3>Informações Gerais</h3>
 
-            <label>Código do Data Center</label>
-            <input type="text" name="codigo" required>
+                <label>Código do Data Center</label>
+                <input type="text" name="codigo" required>
 
-            <label>Nome do Data Center</label>
-            <input type="text" name="nome" required>
+                <label>Nome do Data Center</label>
+                <input type="text" name="nome" required>
 
-            <label>Endereço / Localidade</label>
-            <input type="text" name="endereco" required>
+                <label>Endereço / Localidade</label>
+                <input type="text" name="endereco" required>
 
-            <label>Latitude (opcional)</label>
-            <input type="text" name="latitude">
+                <label>Latitude (opcional)</label>
+                <input type="text" name="latitude">
 
-            <label>Longitude (opcional)</label>
-            <input type="text" name="longitude">
-          </div>
+                <label>Longitude (opcional)</label>
+                <input type="text" name="longitude">
+              </div>
 
-          <div>
-            <h3>Operação</h3>
+              <div>
+                <h3>Operação</h3>
 
-            <label>Proprietário</label>
-            <input type="text" name="proprietario" required>
+                <label>Proprietário</label>
+                <input type="text" name="proprietario" required>
 
-            <label>Tipo de Operação</label>
-            <select name="tipo_operacao" required>
-              <option value="Colocation">Colocation</option>
-              <option value="Backup / DR">Backup / DR</option>
-              <option value="Enterprise Privado">Enterprise Privado</option>
-            </select>
+                <label>Tipo de Operação</label>
+                <select name="tipo_operacao" required>
+                  <option value="Colocation">Colocation</option>
+                  <option value="Backup / DR">Backup / DR</option>
+                  <option value="Enterprise Privado">Enterprise Privado</option>
+                </select>
 
-            <label>Data de Início</label>
-            <input type="date" name="data_inicio" required>
+                <label>Data de Início</label>
+                <input type="date" name="data_inicio" required>
 
-            <label>Status</label>
-            <select name="status" required>
-              <option value="Operacional">Operacional</option>
-              <option value="Em Expansão">Em Expansão</option>
-              <option value="Planejamento">Planejamento</option>
-            </select>
+                <label>Status</label>
+                <select name="status" required>
+                  <option value="Operacional">Operacional</option>
+                  <option value="Em Expansão">Em Expansão</option>
+                  <option value="Planejamento">Planejamento</option>
+                </select>
 
-            <label>SLA Disponibilidade (%)</label>
-            <input type="text" name="sla_disponibilidade" placeholder="99.99%" required>
+                <label>SLA Disponibilidade (%)</label>
+                <input type="text" name="sla_disponibilidade" placeholder="99.99%" required>
 
 
-          </div>
+              </div>
 
-          <div>
+              <div>
 
-            <h3>Energia</h3>
-            <label>Capacidade Total (kW)</label>
-            <input type="number" name="capacidade_kw" required>
-            <h3>Climatização</h3>
-            <label>Tipo</label>
-            <select name="clima_tipo" required>
-              <option value="CRAC + Free Cooling">CRAC + Free Cooling</option>
-              <option value="Water-Cooled">Water-Cooled</option>
-              <option value="Free Cooling + Chillers">Free Cooling + Chillers</option>
-            </select>
+                <h3>Energia</h3>
+                <label>Capacidade Total (kW)</label>
+                <input type="number" name="capacidade_kw" required>
+                <h3>Climatização</h3>
+                <label>Tipo</label>
+                <select name="clima_tipo" required>
+                  <option value="CRAC + Free Cooling">CRAC + Free Cooling</option>
+                  <option value="Water-Cooled">Water-Cooled</option>
+                  <option value="Free Cooling + Chillers">Free Cooling + Chillers</option>
+                </select>
 
-            <h3>Rede</h3>
-            <label>Carriers</label>
-            <input name="carriers" placeholder="Ex: Vivo, Embratel">
+                <h3>Rede</h3>
+                <label>Carriers</label>
+                <input name="carriers" placeholder="Ex: Vivo, Embratel">
 
-            <label>Uplink Total (Gbps)</label>
-            <input type="number" name="uplink_total_Gbps" required>
+                <label>Uplink Total (Gbps)</label>
+                <input type="number" name="uplink_total_Gbps" required>
 
-            <div class="form-buttons">
-              <button class="btn-cancel" type="button" id="closeModal">Cancelar</button>
-              <button class="btn-submit" type="submit">Salvar</button>
+                <div class="form-buttons">
+                  <button class="btn-cancel" type="button" id="closeModal">Cancelar</button>
+                  <button class="btn-submit" type="submit">Salvar</button>
+                </div>
+              </div>
+
             </div>
-          </div>
+          </form>
+
 
         </div>
-      </form>
+      </div>
 
+    <div id="dcdel-modal" class="dcdel-overlay">
+      <div class="dcdel-box">
 
+        <h2 class="dcdel-title">Excluir datacenter</h2>
+        <p class="dcdel-text">Tem certeza que deseja excluir este datacenter?</p>
+
+        <form id="dcdel-form" method="POST">
+          <div class="dcdel-buttons">
+            <button type="button" class="dcdel-cancel" onclick="dcdel_close()">Cancelar</button>
+            <button type="submit" class="dcdel-confirm">Excluir</button>
+          </div>
+        </form>
+
+      </div>
     </div>
-  </div>
 
-  <div id="modal-delete" class="modal" style="display:none;
-     position:fixed; top:0; left:0; width:100%; height:100%;
-     background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
-  
-  <div style="background:white; padding:20px; border-radius:8px; width:300px;">
-    <h3>Confirmar exclusão</h3>
-    <p>Deseja realmente excluir este datacenter?</p>
 
-    <form id="delete-form" method="POST">
-      <button type="submit" style="background:red; color:white;">Excluir</button>
-      <button type="button" onclick="fecharModal()">Cancelar</button>
-    </form>
-  </div>
-</div>
 
  <!-- tabela -->
 
@@ -170,7 +173,7 @@
         <th scope="col">CUE</th>
         <th scope="col">DCiE</th>
         <th scope="col">WUE</th>
-        <th></th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -185,12 +188,10 @@
         <td>{{ dc.indicadores.wue | default("N/A") }}</td>
         <td>
           <a href="{{ url_for('pagina_datacenter', codigo=dc.codigo) }}"><button>⟶</button></a>
+            <button class="dcdel-btn" onclick="dcdel_open({{ dc.id }})">
+            &#128465;
+          </button>
         </td>
-       <td>
-          <button onclick="abrirModal({{ dc.id }})" style="color:red;">
-        &#128465;
-    </button>
-</td>
 
       </tr>
       {% endfor %}
@@ -230,16 +231,15 @@
 
     });
  
-      function abrirModal(id) {
-          const modal = document.getElementById("modal-delete");
-          const form = document.getElementById("delete-form");
-
-          form.action = "/datacenter/deletar/" + id;
+     function dcdel_open(id) {
+          const modal = document.getElementById("dcdel-modal");
           modal.style.display = "flex";
+
+          document.getElementById("dcdel-form").action = "/datacenter/deletar/" + id;
       }
 
-      function fecharModal() {
-          document.getElementById("modal-delete").style.display = "none";
+      function dcdel_close() {
+          document.getElementById("dcdel-modal").style.display = "none";
       }
 
   </script>
