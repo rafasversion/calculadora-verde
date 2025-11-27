@@ -1,147 +1,293 @@
-import json
-from flask import Flask, request, render_template
-from calculador import calcular_pue
-from calculador import calcular_cue
-from calculador import calcular_dcie
-from calculador import calcular_wue
+from flask import Flask, request, render_template, redirect, url_for
+from calculador import calcular_pue, calcular_cue, calcular_dcie, calcular_wue
 import db_service as db
+import datetime
 
 app = Flask(__name__)
+
+def limitar_angulo(a):
+
+    return max(-90, min(90, a))
+
+def calcular_angulo_pue(pue):
+
+    if pue <= 1.0:
+        return -90
+    if pue >= 4.0:
+        return 90
+ 
+    angulo = -90 + ((pue - 1.0) / 3.0) * 180
+    return limitar_angulo(angulo)
+
+def calcular_angulo_cue(cue, v_max=1.0): 
+    if cue <= 0:
+        return -90
+    if cue >= v_max:
+        return 90
+    angulo = -90 + (cue / v_max) * 180
+    return limitar_angulo(angulo)
+
+def calcular_angulo_dcie(dcie, v_min=0, v_max=100):
+    if dcie <= v_min:
+        return -90
+    if dcie >= v_max:
+        return 90
+    angulo = -90 + ((dcie - v_min) / (v_max - v_min)) * 180
+    return limitar_angulo(angulo)
+
+def calcular_angulo_wue(wue, v_max=2.0): 
+    if wue <= 0:
+        return -90
+    if wue >= v_max:
+        return 90
+    angulo = -90 + (wue / v_max) * 180
+    return limitar_angulo(angulo)
 
 @app.route("/")
 def homepage():
     datacenters = db.listar_datacenters()
-    return render_template("homepage.html", datacenters=datacenters)
+
+    media_pue = 1.0 
+    media_cue = 0.0
+    media_dcie = 0.0
+    media_wue = 0.0
+
+    if datacenters:
+        def somar_indicador(indicador_key):
+            soma = 0.0
+            contagem = 0
+            for dc in datacenters:
+                valor_str = dc.get("indicadores", {}).get(indicador_key)
+                if valor_str:
+                    try:
+                        soma += float(valor_str)
+                        contagem += 1
+                    except ValueError:
+                        pass
+            return soma, contagem
+
+        
+        soma_pue, total_pue = somar_indicador("pue")
+        soma_cue, total_cue = somar_indicador("cue")
+        soma_dcie, total_dcie = somar_indicador("dcie")
+        soma_wue, total_wue = somar_indicador("wue")
+
+      
+        media_pue = soma_pue / total_pue if total_pue > 0 else 1.0
+        media_cue = soma_cue / total_cue if total_cue > 0 else 0.0
+        media_dcie = soma_dcie / total_dcie if total_dcie > 0 else 0.0
+        media_wue = soma_wue / total_wue if total_wue > 0 else 0.0
+    
+    angulo_pue = calcular_angulo_pue(media_pue)
+    angulo_cue = calcular_angulo_cue(media_cue)
+    angulo_dcie = calcular_angulo_dcie(media_dcie)
+    angulo_wue = calcular_angulo_wue(media_wue) 
+
+    return render_template(
+        "homepage.html",
+        datacenters=datacenters,
+        angulo_pue=angulo_pue,
+        angulo_cue=angulo_cue,
+        angulo_dcie=angulo_dcie,
+        angulo_wue=angulo_wue,
+     
+        media_pue=f"{media_pue:.2f}",
+        media_cue=f"{media_cue:.2f}",
+        media_dcie=f"{media_dcie:.2f}",
+        media_wue=f"{media_wue:.2f}"
+    )
 
 @app.route("/metricas")
 def metricas():
     return render_template("metricas.html")
 
-@app.route("/datacenter/<int:id>")
-def datacenter(id):
-    dc = db.buscar_datacenter(id)
+@app.route("/datacenter/<codigo>")
+def pagina_datacenter(codigo):
+    dc = db.buscar_por_codigo(codigo)
 
     if not dc:
-        return "Datacenter não encontrado", 404
+        return f"Datacenter '{codigo}' não encontrado.", 404
 
-    m = dc["metricas_ambientais"]
-    energia_total = m["energia_total_kWh"]
-    energia_ti = m["energia_ti_kWh"]
-    emissao = m["emissao_CO2_kg"]
-    agua = m["agua_consumida_L"]
+    def get_indicador_float(key, default_value=0.0):
+        try:
+            return float(dc["indicadores"].get(key, default_value))
+        except (ValueError, TypeError):
+            return default_value
 
-    dc["energia"]["PUE"]  = calcular_pue(energia_total, energia_ti)["pue"]
-    dc["energia"]["DCiE"] = calcular_dcie(energia_total, energia_ti)["dcie"]
-    dc["energia"]["CUE"]  = calcular_cue(emissao, energia_ti)["cue"]
-    dc["energia"]["WUE"]  = calcular_wue(agua, energia_ti)["wue"]
+    pue = get_indicador_float("pue", 1.0) 
+    cue = get_indicador_float("cue", 0.0)
+    dcie = get_indicador_float("dcie", 0.0)
+    wue = get_indicador_float("wue", 0.0)
 
-    return render_template("datacenter.html", datacenter=dc)
+    angulo_pue = calcular_angulo_pue(pue)
+    angulo_cue = calcular_angulo_cue(cue)
+    angulo_dcie = calcular_angulo_dcie(dcie)
+    angulo_wue = calcular_angulo_wue(wue) 
 
-@app.route("/calcular", methods=["POST"])
+    return render_template(
+        "datacenter.html",
+        datacenter=dc,
+        angulo_pue=angulo_pue,
+        angulo_cue=angulo_cue,
+        angulo_dcie=angulo_dcie,
+        angulo_wue=angulo_wue
+    )
 
-def calcular():
-    energia_total = request.form.get("energia_total")
-    energia_ti = request.form.get("energia_equipamentos")
-    emissao_total_co2 = request.form.get("emissao_total_co2")
-    volume_agua_utilizada = request.form.get("volume_agua_utilizada")
+@app.route("/api/datacenters", methods=["POST"])
+def api_adicionar_datacenter():
+    form = request.form
 
-    resultado_pue = calcular_pue(energia_total, energia_ti)
+    codigo = form.get("codigo", "").strip()
+    nome = form.get("nome", "").strip()
+    endereco = form.get("endereco", "").strip()
+    latitude = form.get("latitude", "").strip() or None
+    longitude = form.get("longitude", "").strip() or None
 
-    if "erro" in resultado_pue:
-        mensagem_pue = f"{resultado_pue['erro']}"
-        angulo_pue = 0 
-    else:
-        mensagem_pue = (
-            f"<strong>PUE:</strong> {resultado_pue['pue']:.2f}<br>"
-            f"<strong>Status:</strong> {resultado_pue['status']}"
-            )
-        pue = resultado_pue["pue"]
+    proprietario = form.get("proprietario", "").strip()
+    tipo = form.get("tipo_operacao", "").strip()
+    data_inicio = form.get("data_inicio", "").strip()
+    status = form.get("status", "").strip()
+    sla = form.get("sla_disponibilidade", "").strip()
 
-        if pue < 1:
-            angulo_pue = -90
-        elif pue > 4:
-            angulo_pue = 90
-        else:
-      
-            angulo_pue = -90 + (pue - 1) * 60
+    capacidade_kw = form.get("capacidade_kw", "").strip()
+    clima_tipo = form.get("clima_tipo", "").strip()
+    carriers_raw = form.get("carriers", "").strip()
+    uplink_total_Gbps = form.get("uplink_total_Gbps", "").strip()
 
-  
-        angulo_pue = max(-90, min(90, angulo_pue))
+    if not nome or not codigo or not proprietario or not capacidade_kw:
+        return "Campos obrigatórios faltando", 400
 
-  # cue
-    resultado_cue = calcular_cue(emissao_total_co2, energia_ti)
+    try:
+        capacidade_kw = float(capacidade_kw)
+    except ValueError:
+        return "Capacidade deve ser numérica", 400
 
-    if "erro" in resultado_cue:
-        mensagem_cue = f"{resultado_cue['erro']}"
-        angulo_cue = 0
-    else:
-        mensagem_cue = (
-          f"<strong>CUE:</strong> {resultado_cue['cue']:.2f}<br>"
-          f"<strong>Status:</strong> {resultado_cue['status']}"
-         )
-
-        cue = resultado_cue["cue"]  
-
+    # Estimativas automáticas
+    consumo_medio_kW = round(capacidade_kw * 0.78, 2)
+    horas_ano = 8760
+    energia_total_kWh = int(round(consumo_medio_kW * horas_ano))
+    energia_ti_kWh = int(round(energia_total_kWh * 0.69))
+    energia_renovavel_kWh = int(round(energia_total_kWh * 0.40))
+    fator_emissao = 0.07
+    emissao_CO2_kg = int(round(energia_total_kWh * fator_emissao))
     
-    angulo_cue = -90 + (cue / 100) * 180
+    fator_wue_ideal = 1.05 
+    agua_consumida_L = int(round(energia_ti_kWh * fator_wue_ideal))
+    
 
-    angulo_cue = max(-90, min(90, angulo_cue))
+    carriers = [c.strip() for c in carriers_raw.split(",")] if carriers_raw else []
 
+    novo_dc = {
+        "codigo": codigo,
+        "nome": nome,
+        "localizacao": {
+            "endereco": endereco,
+            "latitude": latitude or "",
+            "longitude": longitude or "",
+        },
+        "operacao": {
+            "proprietario": proprietario,
+            "tipo": tipo or "Colocation",
+            "data_inicio": data_inicio or datetime.date.today().isoformat(),
+            "status": status or "Planejamento",
+            "sla_disponibilidade": sla or "99.00%"
+        },
+        "infraestrutura": {
+            "area_total_m2": str(int(capacidade_kw * 1.6)),
+            "area_util_m2": str(int(capacidade_kw * 1.6 * 0.65)),
+            "num_racks": str(int(max(1, round(capacidade_kw / 10)))),
+            "piso_elevado": True,
+            "redundancia_energia": "N+1",
+            "redundancia_climatizacao": "N+1"
+        },
+        "energia": {
+            "alimentacao_principal": "",
+            "capacidade_total_kW": str(int(capacidade_kw)),
+            "consumo_medio_kW": str(consumo_medio_kW),
+            "renovavel_kWh": str(energia_renovavel_kWh),
+            "fator_emissao_kgCO2_kWh": str(fator_emissao),
+            "fonte_fator": "ONS 2025",
+            "ups": {
+                "tipo": "Online Dupla Conversão",
+                "fabricante": "APC",
+                "modelo": "Symmetra PX",
+                "autonomia_min": "15",
+                "quantidade": "2"
+            },
+            "geradores": {
+                "fabricante": "Cummins",
+                "quantidade": "1",
+                "autonomia_horas": "8"
+            },
+            "PUE": "",
+            "DCiE": "",
+            "WUE": "",
+            "CUE": ""
+        },
+        "climatizacao": {
+            "tipo": clima_tipo or "CRAC + Free Cooling",
+            "capacidade_total_kW": str(int(capacidade_kw * 1.05)),
+            "temperatura_media_C": "",
+            "umidade_relativa": ""
+        },
+        "rede": {
+            "carriers": carriers,
+            "uplink_total_Gbps": str(uplink_total_Gbps or ""),
+            "topologia": ""
+        },
+        "seguranca": {
+            "fisica": {
+                "biometria": True,
+                "cftv": True,
+                "retencao_imagens_dias": "90",
+                "supressao_incendio": "FM200"
+            },
+            "logica": {}
+        },
+        "monitoramento": {
+            "sistema": "Zabbix",
+            "metricas": ["CPU", "Energia", "Temperatura", "Rede"],
+            "alertas_email": True
+        },
+        "backup_e_DR": {},
+        "metricas_ambientais": {
+            "periodo": {
+                "inicio": f"{datetime.date.today().year}-01-01",
+                "fim": f"{datetime.date.today().year}-12-31"
+            },
+            "energia_total_kWh": str(energia_total_kWh),
+            "energia_ti_kWh": str(energia_ti_kWh),
+            "energia_renovavel_kWh": str(energia_renovavel_kWh),
+            "agua_consumida_L": str(agua_consumida_L),
+            "reuso_percentual": "0",
+            "emissao_CO2_kg": str(emissao_CO2_kg),
+            "fator_emissao_kgCO2_kWh": str(fator_emissao),
+            "fonte_dado": ["estimado"],
+            "tipo_calculo_emissao": "estimado"
+        },
+        "indicadores": {
+            "pue": "",
+            "cue": "",
+            "wue": "",
+            "dcie": "",
+            "status": status or "Planejamento"
+        }
+    }
 
-   # dcie
-    resultado_dcie = calcular_dcie(energia_total, energia_ti)
+    r_pue = calcular_pue(novo_dc["metricas_ambientais"]["energia_total_kWh"], novo_dc["metricas_ambientais"]["energia_ti_kWh"])
+    r_cue = calcular_cue(novo_dc["metricas_ambientais"]["emissao_CO2_kg"], novo_dc["metricas_ambientais"]["energia_ti_kWh"])
+    r_dcie = calcular_dcie(novo_dc["metricas_ambientais"]["energia_total_kWh"], novo_dc["metricas_ambientais"]["energia_ti_kWh"])
+    r_wue = calcular_wue(novo_dc["metricas_ambientais"]["agua_consumida_L"], novo_dc["metricas_ambientais"]["energia_ti_kWh"])
 
-    if "erro" in resultado_dcie:
-        mensagem_dcie = f"{resultado_dcie['erro']}"
-        angulo_dcie = 0 
-    else:
-        mensagem_dcie = (
-            f"<strong>DCiE:</strong> {resultado_dcie['dcie']:.2f}<br>"
-            f"<strong>Status:</strong> {resultado_dcie['status']}"
-            )
+    if "pue" in r_pue: novo_dc["indicadores"]["pue"] = r_pue["pue"]
+    if "cue" in r_cue: novo_dc["indicadores"]["cue"] = r_cue["cue"]
+    if "dcie" in r_dcie: novo_dc["indicadores"]["dcie"] = r_dcie["dcie"]
+    if "wue" in r_wue: novo_dc["indicadores"]["wue"] = r_wue["wue"]
 
-        dcie = resultado_dcie["dcie"]
+    db.adicionar_datacenter(novo_dc)
 
-        if dcie < 1:
-            angulo_dcie = -90
-        elif pue > 4:
-            angulo_dcie = 90
-        else:
-      
-            angulo_dcie = -90 + (dcie - 1) * 60
-
-  
-        angulo_dcie = max(-90, min(90, angulo_dcie))
-
-# wue
-
-    resultado_wue = calcular_wue(volume_agua_utilizada, energia_ti)
-
-    if "erro" in resultado_wue:
-        mensagem_wue = f"{resultado_wue['erro']}"
-        angulo_wue = 0 
-    else:
-        mensagem_wue = (
-            f"<strong>WUE:</strong> {resultado_wue['wue']:.2f}<br>"
-            f"<strong>Status:</strong> {resultado_wue['status']}"
-            )
-
-        wue = resultado_wue["wue"]
-
-        if wue < 1:
-            angulo_wue = -90
-        elif wue > 4:
-            angulo_wue = 90
-        else:
-      
-            angulo_wue = -90 + (wue - 1) * 60
-
-  
-        angulo_wue = max(-90, min(90, angulo_wue))
-
-    return render_template("homepage.html", resultado_pue=mensagem_pue, angulo_pue=angulo_pue, resultado_cue=mensagem_cue, angulo_cue=angulo_cue, resultado_dcie=mensagem_dcie, angulo_dcie=angulo_dcie, resultado_wue=mensagem_wue, angulo_wue=angulo_wue)
+    return redirect(url_for("homepage"))
 
 
 if __name__ == "__main__":
-    print(datacenter)
     app.run(debug=True)

@@ -4,9 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../static/css/homepage.css">
+  <title>{{ datacenter.nome }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
 </head>
+
 <header class="header">
   <div class="header-left">
     <h1>Calculadora Verde</h1>
@@ -20,71 +21,70 @@
 </header>
 
 <body>
+
   <div class="painel">
     <h1>{{ datacenter.nome }}</h1>
 
     <div class="medidores">
       <div class="medidor-container">
-        <h2>PUE</h2>
-        <img src="../static/img/medidor_pue.svg" class="medidor-img" alt="medidor">
-        <img src="../static/img/ponteiro.svg" class="ponteiro" style="transform: rotate(0deg);">
+        <h2>PUE ({{ datacenter.indicadores.pue }})</h2>
+        <img src="{{ url_for('static', filename='img/medidor_pue.svg') }}" class="medidor-img">
+        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_pue }}deg);">
       </div>
+
       <div class="medidor-container">
-        <h2>CUE</h2>
-        <img src="../static/img/medidor_cue.svg" class="medidor-img" alt="medidor">
-        <img src="../static/img/ponteiro.svg" class="ponteiro" style="transform: rotate({{ angulo_cue|default(0) }}deg);">
+        <h2>CUE ({{ datacenter.indicadores.cue }})</h2>
+        <img src="{{ url_for('static', filename='img/medidor_cue.svg') }}" class="medidor-img">
+        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_cue }}deg);">
       </div>
+
       <div class="medidor-container">
-        <h2>DCiE (%)</h2>
-        <img src="{{ url_for('static', filename='img/medidor_dcie.svg') }}" class="medidor-img" alt="medidor">
-        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_dcie|default(0) }}deg);">
+        <h2>DCiE (%) ({{ datacenter.indicadores.dcie }})</h2>
+        <img src="{{ url_for('static', filename='img/medidor_dcie.svg') }}" class="medidor-img">
+        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_dcie }}deg);">
       </div>
+
       <div class="medidor-container">
-        <h2>WUE</h2>
-        <img src="{{ url_for('static', filename='img/medidor_cue.svg') }}" class="medidor-img" alt="medidor">
-        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_wue|default(0) }}deg);">
+        <h2>WUE ({{ datacenter.indicadores.wue }})</h2>
+        <img src="{{ url_for('static', filename='img/medidor_wue.svg') }}" class="medidor-img">
+        <img src="{{ url_for('static', filename='img/ponteiro.svg') }}" class="ponteiro" style="transform: rotate({{ angulo_wue }}deg);">
       </div>
     </div>
   </div>
 
   <main class="datacenter-container">
     <div class="datacenter-card">
+
       <div class="datacenter-card__infos">
-        <p><strong>Localização:</strong> {{ datacenter.localizacao.endereco }} </p>
+        <p><strong>Localização:</strong> {{ datacenter.localizacao.endereco }}</p>
+        <p><strong>Proprietário:</strong> {{ datacenter.operacao.proprietario }}</p>
+        <p><strong>Tipo de Operação:</strong> {{ datacenter.operacao.tipo }}</p>
         <p><strong>Capacidade:</strong> {{ datacenter.energia.capacidade_total_kW }} kW</p>
-        <p><strong>Energia Total:</strong> {{ datacenter.energia_total_kWh }} kWh</p>
-        <p><strong>Energia TI:</strong> {{ datacenter.energia_ti_kWh }} kWh</p>
-        <p><strong>Emissão Total CO₂:</strong> {{ datacenter.emissao_CO2_kg }} kg</p>
+        <p><strong>Área Útil:</strong> {{ datacenter.infraestrutura.area_util_m2 }} m²</p>
       </div>
+
       <div class="datacenter-card__infos">
-        <p><strong>Fator de Emissão:</strong> {{ datacenter.emissao_CO2fator_emissao_kgCO2_kWh_kg }} kgCO₂/kWh</p>
-        <p><strong>Volume de Água:</strong>  {{ datacenter.metricas_ambientais.agua_consumida_L }} L</p>
-        <p><strong>Temperatura Média:</strong> {{ datacenter.climatizacao.temperatura_media_C }} °C</p>
-        <p><strong>Umidade Média:</strong> {{ datacenter.climatizacao.umidade_relativa }}</p>
+        <p><strong>Energia Total (kWh/ano):</strong> {{ datacenter.metricas_ambientais.energia_total_kWh }}</p>
+        <p><strong>Energia TI (kWh/ano):</strong> {{ datacenter.metricas_ambientais.energia_ti_kWh }}</p>
+        <p><strong>Emissão Total CO₂ (kg):</strong> {{ datacenter.metricas_ambientais.emissao_CO2_kg }}</p>
+        <p><strong>Volume de Água (L/ano):</strong> {{ datacenter.metricas_ambientais.agua_consumida_L }}</p>
+        <p><strong>Redundância Energia:</strong> {{ datacenter.infraestrutura.redundancia_energia }}</p>
       </div>
 
       <div class="datacenter-card__dados">
         <div class="datacenter-card__indices">
-          <p><strong>PUE:</strong> {{ datacenter.energia.PUE }}</p>
-          <p><strong>CUE:</strong> {{ datacenter.energia.CUE }}</p>
-          <p><strong>WUE:</strong> {{ datacenter.energia.WUE }}</p>
-          <p><strong>DCiE:</strong> {{ datacenter.energia.DCiE }}</p>
+          <p><strong>PUE:</strong> {{ datacenter.indicadores.pue }}</p>
+          <p><strong>CUE:</strong> {{ datacenter.indicadores.cue }}</p>
+          <p><strong>WUE:</strong> {{ datacenter.indicadores.wue }}</p>
+          <p><strong>DCiE:</strong> {{ datacenter.indicadores.dcie }}%</p>
         </div>
-        <p class="datacenter-card__status"><strong>Status:</strong> {{ datacenter.indicadores.status }}</p>
+        <p class="datacenter-card__status">
+          <strong>Status:</strong> {{ datacenter.indicadores.status }}
+        </p>
       </div>
 
     </div>
-
   </main>
-
-  {% if resultado_pue %}
-  <div class="status">
-    <p>{{ resultado_pue|safe }}</p>
-    <p>{{ resultado_cue|safe }}</p>
-    <p>{{ resultado_dcie|safe }}</p>
-    <p>{{ resultado_wue|safe }}</p>
-  </div>
-  {% endif %}
 
 </body>
 

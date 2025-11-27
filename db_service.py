@@ -22,32 +22,41 @@ def listar_datacenters():
 
 
 def buscar_datacenter(datacenter_id):
+    """Busca um datacenter pelo seu ID numérico."""
     datacenters = listar_datacenters()
     for d in datacenters:
-        if d["id"] == datacenter_id:
+        if d.get("id") == datacenter_id:
+            return d
+    return None
+
+def buscar_por_codigo(codigo):
+    """Busca um datacenter pelo seu código (ex: DC-SP01)."""
+    datacenters = listar_datacenters()
+    for d in datacenters:
+        if d.get("codigo") == codigo:
             return d
     return None
 
 
-def adicionar_datacenter(nome):
-    dados = _carregar()
+def adicionar_datacenter(datacenter_obj):
 
+    dados = _carregar()
     datacenters = dados["datacenters"]
     novo_id = 1
     if datacenters:
-        novo_id = max(d["id"] for d in datacenters) + 1
+        novo_id = max(d.get("id", 0) for d in datacenters) + 1
 
-    novo_datacenter = {"id": novo_id, "nome": nome}
-    datacenters.append(novo_datacenter)
-
+    datacenter_obj["id"] = novo_id
+    datacenters.append(datacenter_obj)
     _salvar(dados)
-    return novo_datacenter
+    return datacenter_obj
+
 
 
 def remover_datacenter(datacenter_id):
     dados = _carregar()
     datacenters = dados["datacenters"]
 
-    dados["datacenters"] = [d for d in datacenters if d["id"] != datacenter_id]
+    dados["datacenters"] = [d for d in datacenters if d.get("id") != datacenter_id]
 
     _salvar(dados)
