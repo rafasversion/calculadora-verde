@@ -168,6 +168,19 @@ th {
   cursor: pointer;
 }
 
+.trash-icon {
+  width: 100px;
+  height: 30px;
+  background: rgb(170, 6, 6);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  align-items: center;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
 .table-datacenters button:hover {
   color: #fff;
   background: rgb(0, 188, 19);

@@ -133,6 +133,7 @@ def pagina_datacenter(codigo):
         angulo_wue=angulo_wue
     )
 
+
 @app.route("/api/datacenters", methods=["POST"])
 def api_adicionar_datacenter():
     form = request.form
@@ -287,6 +288,11 @@ def api_adicionar_datacenter():
     db.adicionar_datacenter(novo_dc)
 
     return redirect(url_for("homepage"))
+
+@app.route("/datacenter/deletar/<int:id>", methods=["POST"])
+def deletar(id):
+    db.deletar_datacenter(id)
+    return redirect("/")
 
 
 if __name__ == "__main__":

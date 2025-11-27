@@ -53,10 +53,14 @@ def adicionar_datacenter(datacenter_obj):
 
 
 
-def remover_datacenter(datacenter_id):
+def deletar_datacenter(datacenter_id):
     dados = _carregar()
     datacenters = dados["datacenters"]
 
-    dados["datacenters"] = [d for d in datacenters if d.get("id") != datacenter_id]
+    dados["datacenters"] = [
+        dc for dc in datacenters if dc.get("id") != datacenter_id
+    ]
 
     _salvar(dados)
+    return True
+
