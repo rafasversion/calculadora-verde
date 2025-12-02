@@ -1,47 +1,13 @@
 from flask import Flask, request, render_template, redirect, url_for
-from calculador import calcular_pue, calcular_cue, calcular_dcie, calcular_wue
+from calculador import (
+    calcular_pue, calcular_cue, calcular_dcie, calcular_wue,
+    calcular_angulo_pue, calcular_angulo_cue, calcular_angulo_dcie, calcular_angulo_wue
+)
 import db_service as db
 import datetime
 
 app = Flask(__name__)
 
-def limitar_angulo(a):
-
-    return max(-90, min(90, a))
-
-def calcular_angulo_pue(pue):
-
-    if pue <= 1.0:
-        return -90
-    if pue >= 4.0:
-        return 90
- 
-    angulo = -90 + ((pue - 1.0) / 3.0) * 180
-    return limitar_angulo(angulo)
-
-def calcular_angulo_cue(cue, v_max=1.0): 
-    if cue <= 0:
-        return -90
-    if cue >= v_max:
-        return 90
-    angulo = -90 + (cue / v_max) * 180
-    return limitar_angulo(angulo)
-
-def calcular_angulo_dcie(dcie, v_min=0, v_max=100):
-    if dcie <= v_min:
-        return -90
-    if dcie >= v_max:
-        return 90
-    angulo = -90 + ((dcie - v_min) / (v_max - v_min)) * 180
-    return limitar_angulo(angulo)
-
-def calcular_angulo_wue(wue, v_max=2.0): 
-    if wue <= 0:
-        return -90
-    if wue >= v_max:
-        return 90
-    angulo = -90 + (wue / v_max) * 180
-    return limitar_angulo(angulo)
 
 @app.route("/")
 def homepage():
@@ -90,7 +56,7 @@ def homepage():
         angulo_cue=angulo_cue,
         angulo_dcie=angulo_dcie,
         angulo_wue=angulo_wue,
-     
+      
         media_pue=f"{media_pue:.2f}",
         media_cue=f"{media_cue:.2f}",
         media_dcie=f"{media_dcie:.2f}",
@@ -163,7 +129,6 @@ def api_adicionar_datacenter():
     except ValueError:
         return "Capacidade deve ser numérica", 400
 
-    # Estimativas automáticas
     consumo_medio_kW = round(capacidade_kw * 0.78, 2)
     horas_ano = 8760
     energia_total_kWh = int(round(consumo_medio_kW * horas_ano))

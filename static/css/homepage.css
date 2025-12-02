@@ -155,7 +155,7 @@ th {
   text-align: center;
 }
 
-.table-datacenters button {
+.table-datacenters .btn-detalhar {
   width: 100px;
   height: 30px;
   background: rgb(0, 39, 20);
@@ -163,9 +163,15 @@ th {
   border: none;
   border-radius: 5px;
   font-weight: bolder;
-  align-items: center;
+  vertical-align: middle;
   padding: 8px 14px;
   cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.table-datacenters .btn-detalhar:hover {
+  color: #fff;
+  background: rgb(0, 188, 19);
 }
 
 .trash-icon {
@@ -179,11 +185,6 @@ th {
   align-items: center;
   padding: 8px 14px;
   cursor: pointer;
-}
-
-.table-datacenters button:hover {
-  color: #fff;
-  background: rgb(0, 188, 19);
 }
 
 .datacenter-container {
@@ -237,6 +238,7 @@ th {
   display: flex;
   justify-content: flex-end;
 }
+
 .btn-adicionarDatacenter {
   width: 180px;
   height: 30px;
@@ -248,6 +250,15 @@ th {
   border-radius: 5px;
   color: rgb(0, 39, 20);
   cursor: pointer;
+  transition: all 0.4s ease-out;
+}
+
+.btn-adicionarDatacenter:hover {
+  background: rgb(0, 188, 19);
+  color: #fff;
+  border: 2px solid rgb(0, 188, 19);
+  transform: scale(1.01) translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 39, 20, 0.3);
 }
 
 .modal-overlay {
@@ -320,29 +331,26 @@ form .form-container {
   gap: 110px;
 }
 
-/* Fundo escuro */
 .dcdel-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0, 0, 0, 0.55);
   justify-content: center;
   align-items: center;
   z-index: 999999;
 }
 
-/* Caixa */
 .dcdel-box {
   width: 380px;
   background: #fff;
   padding: 24px;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   text-align: center;
   font-family: Arial, sans-serif;
 }
 
-/* Título e texto */
 .dcdel-title {
   margin-bottom: 10px;
   font-size: 20px;
@@ -353,7 +361,6 @@ form .form-container {
   margin-bottom: 25px;
 }
 
-/* Botões */
 .dcdel-buttons {
   display: flex;
   justify-content: flex-end;
@@ -376,7 +383,7 @@ form .form-container {
   background: #d60000;
   color: #fff;
   border: none;
-  padding: 6px 6px;
+  padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
 }
@@ -385,20 +392,21 @@ form .form-container {
   background: #b30000;
 }
 
-/* Botão de lixeira */
 .table-datacenters .dcdel-btn {
-  all: unset;            
   background: #d60000;
   color: #fff;
-  padding: 6px 10px;
+  padding: 3px 10px;
   border-radius: 6px;
+  border: none;
   cursor: pointer;
   font-size: 18px;
+  vertical-align: middle;
   display: inline-block;
   text-align: center;
-  margin-left: 6px !important;
+  margin-left: 6px;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
-
 .table-datacenters .dcdel-btn:hover {
   background: #b30000;
+  transform: scale(1.05);
 }
